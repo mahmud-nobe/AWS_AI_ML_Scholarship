@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # */AIPND-revision/intropyproject-classify-pet-images/print_results.py
 #                                                                             
-# PROGRAMMER: 
-# DATE CREATED:
+# PROGRAMMER: Mahmud
+# DATE CREATED: 26 Aug 2022
 # REVISED DATE: 
 # PURPOSE: Create a function print_results that prints the results statistics
 #          from the results statistics dictionary (results_stats_dic). It 
@@ -62,5 +62,30 @@ def print_results(results_dic, results_stats_dic, model,
     Returns:
            None - simply printing results.
     """    
-    None
+    print(f"CNN Model used for Classification: {model}\n")
+    
+    print(f"Number of Images: {results_stats_dic['n_images']} \nNumber of Dog Images: {results_stats_dic['n_dogs_img']} \nNumber of Not-a-Dog Images: {results_stats_dic['n_notdogs_img']} \n")
+    
+    for key,val in results_stats_dic.items():
+        if key.startswith('pct_'):
+            print(f"{key}: {val}")
+    
+    n_correct_dogs = results_stats_dic['n_correct_dogs']
+    n_images = results_stats_dic['n_images']
+    n_correct_notdogs = results_stats_dic['n_correct_notdogs']
+    
+    if print_incorrect_dogs and (n_correct_dogs+n_correct_notdogs < n_images):
+        print('\nMissclassified Dogs:')
+        for key,val in results_dic.items():
+            if sum(val[3:]) == 1:
+                print(f"{key}\nPet Image Label: {val[0]}\nClassified Label: {val[1]}\n")
+    
+    n_correct_breed = results_stats_dic['n_correct_breed']
+    if print_incorrect_breed and (n_correct_dogs > n_correct_breed):
+        print('\nMissclassified Breed:')
+        for key,val in results_dic.items():
+            if (sum(val[3:]) == 2) and (val[2] == 0):
+                print(f"{key}\nPet Image Label: {val[0]}\nClassified Label: {val[1]}\n")
+    
+    return None
                 
