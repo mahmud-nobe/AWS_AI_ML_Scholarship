@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # */AIPND-revision/intropyproject-classify-pet-images/calculates_results_stats.py
 #                                                                             
-# PROGRAMMER:
-# DATE CREATED:                                  
+# PROGRAMMER: Mahmud
+# DATE CREATED: 26 Aug 2022                                 
 # REVISED DATE: 
 # PURPOSE: Create a function calculates_results_stats that calculates the 
 #          statistics of the results of the programrun using the classifier's model 
@@ -70,4 +70,44 @@ def calculates_results_stats(results_dic):
     """        
     # Replace None with the results_stats_dic dictionary that you created with 
     # this function 
-    return None
+    #results_stats_dic = {}
+    n_images = len(results_dic)
+    dog_image = 0
+    not_dog_image = 0
+    correct_dog_match = 0
+    correct_not_dog_match = 0
+    correct_breed_match = 0
+    label_match = 0
+    
+    for key, val in results_dic.items():
+        if val[3] == 1:
+            dog_image += 1
+            
+            if val[2] == 1:
+                correct_breed_match += 1
+                label_match += 1
+                
+            if val[4] == 1:
+                correct_dog_match += 1
+                
+        else:
+            not_dog_image += 1
+            if val[2] == 1:
+                label_match += 1
+            
+            if val[4] == 0:
+                correct_not_dog_match += 1
+             
+    results_stats_dic = {'n_images' : n_images,
+                         'n_dogs_img': dog_image,
+                         'n_notdogs_img': not_dog_image,
+                         'n_match' : label_match,
+                         'n_correct_dogs': correct_dog_match,
+                         'n_correct_notdogs': correct_not_dog_match,
+                         'n_correct_breed':  correct_breed_match,
+                         'pct_match': label_match / n_images * 100,
+                         'pct_correct_dogs' : correct_dog_match / dog_image * 100,
+                         'pct_correct_notdogs' : correct_not_dog_match / not_dog_image * 100,
+                         'pct_correct_breed' : correct_breed_match / dog_image * 100}
+        
+    return results_stats_dic
